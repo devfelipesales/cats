@@ -3,11 +3,13 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <div className='p-6 border-b border-b-gray-200 center'>
-      <div className='flex gap-2 justify-between items-center container mx-auto'>
-        <Link href='/'>
-          <Image src='/logo-cat2.svg' alt='cat logo' width={64} height={64} />
+    <div className='border-b border-b-gray-200 center'>
+      <div className='flex gap-2 justify-between items-center container'>
+        <Link href='/' title='cats'>
+          {/* <Image src='/logo-cat2.svg' alt='cat logo' width={64} height={64} /> */}
+          <Image src='/logocats.png' alt='cat logo' width={80} height={80} />
         </Link>
+
         <Link href='/login' className='flex gap-3 items-center text-indigo-800'>
           Login / Criar
           <svg

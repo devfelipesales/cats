@@ -1,0 +1,36 @@
+.gridImages {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.gridImages img {
+  display: block;
+  object-fit: cover;
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.imageBig {
+  grid-row: span 2;
+  width: 600px;
+  height: 616px;
+}
+
+.imgSmall {
+  width: 300px;
+  height: 300px;
+}
+
+.animeLeft {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: animeLeft ease-in 0.7s forwards;
+}
+
+@keyframes animeLeft {
+  to {
+    opacity: 1;
+    transform: initial;
+  }
+}
