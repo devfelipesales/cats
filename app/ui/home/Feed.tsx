@@ -1,36 +1,22 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import styles from '@/app/(Home)/home.module.css';
-import { clsx } from 'clsx';
+import React from "react";
+import Image from "next/image";
+import styles from "@/app/(Home)/home.module.css";
 
-import LoadingFeed from './LoadingFeed';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Loader from '../Loader';
+import LoadingFeed from "./LoadingFeed";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Loader from "../Loader";
+import { listPhotos } from "@/app/lib/data";
 
-export interface Welcome {
-  id: number;
-  title: string;
-  // price: number;
-  // description: string;
-  images: string[];
-  // creationAt: Date;
-  // updatedAt: Date;
-  category: Category;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  image: string;
-  // creationAt: Date;
-  // updatedAt: Date;
-}
+type TReturnPhotos = {
+  id: string;
+  src: string;
+};
 
 export default function Feed() {
-  const [items, setItems] = React.useState<[] | Welcome[]>([]);
-  const [index, setIndex] = React.useState(2);
+  const [items, setItems] = React.useState<[] | TReturnPhotos[]>([]);
+  const [index, setIndex] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
@@ -41,19 +27,17 @@ export default function Feed() {
       setIsLoading(true);
       setTimeout(async () => {
         try {
-          console.log('Fez o Fetch inicial');
-          const response = await fetch(
-            'https://api.escuelajs.co/api/v1/products?offset=0&limit=10'
-          );
-          const data = (await response.json()) as Welcome[];
-          if (!data.length) {
-            console.log('caiu no sem dados do fetch inicial');
+          const photos = await listPhotos(10, 0);
+
+          console.log(photos.returnData);
+
+          if (!photos.returnData.length) {
+            console.log("caiu no sem dados do fetch inicial");
             setHasMore(false);
             return;
           }
-          console.log(data);
 
-          setItems(data);
+          setItems(photos.returnData);
         } catch (error) {
           console.log(`Ocorreu um erro ${error}`);
         } finally {
@@ -70,29 +54,26 @@ export default function Feed() {
 
     setTimeout(async () => {
       try {
-        console.log('Fez o Fetch do scroll');
+        console.log("Fez o Fetch do scroll");
         console.log(index);
 
-        const response = await fetch(
-          `https://api.escuelajs.co/api/v1/products?offset=${index}&limit=4`
-        );
-        const data = (await response.json()) as Welcome[];
-        console.log(data);
+        const photos = await listPhotos(10, index * 10);
+        console.log(photos.returnData);
 
-        if (!data.length) {
-          console.log('caiu no sem dados do fetch do scroll');
+        if (!photos.returnData.length) {
+          console.log("caiu no sem dados do fetch do scroll");
           setHasMore(false);
           return;
         }
-        console.log('passou para setar os dados');
+        console.log("passou para setar os dados");
 
-        setItems((prevItems) => [...prevItems, ...data]);
+        setItems((prevItems) => [...prevItems, ...photos.returnData]);
       } catch (error) {
         console.log(`Ocorreu um erro ${error}`);
       } finally {
         setIsLoadingMore(false);
       }
-      console.log('atualizou o index');
+      console.log("atualizou o index");
       setIndex((prevIndex) => prevIndex + 1);
     }, 3000);
   };
@@ -105,7 +86,7 @@ export default function Feed() {
         hasMore={hasMore}
         loader={isLoadingMore && <Loader />}
         endMessage={
-          <p className='text-center py-8 text-slate-400'>
+          <p className="py-8 text-center text-slate-400">
             Não existem mais postagens.
           </p>
         }
@@ -121,8 +102,8 @@ export default function Feed() {
               return (
                 <Image
                   key={index}
-                  src={img.images[0]}
-                  alt={img.category.name}
+                  src={img.src}
+                  alt={img.id}
                   className={`${styles.imageBig} ${styles.animeLeft}`}
                   width={600}
                   height={600}
@@ -132,8 +113,8 @@ export default function Feed() {
               return (
                 <Image
                   key={index}
-                  src={img.images[0]}
-                  alt={img.category.name}
+                  src={img.src}
+                  alt={img.id}
                   className={`${styles.imgSmall} ${styles.animeLeft}`}
                   width={300}
                   height={300}
