@@ -21,13 +21,15 @@ export default function Feed() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
   let indexImg = 0;
+  let classImgSize = "";
+  let gridSpan = "";
 
   React.useEffect(() => {
     const getData = () => {
       setIsLoading(true);
       setTimeout(async () => {
         try {
-          const photos = await listPhotos(10, 0);
+          const photos = await listPhotos(9, 0);
 
           console.log(photos.returnData);
 
@@ -57,7 +59,7 @@ export default function Feed() {
         console.log("Fez o Fetch do scroll");
         console.log(index);
 
-        const photos = await listPhotos(10, index * 10);
+        const photos = await listPhotos(9, index * 9);
         console.log(photos.returnData);
 
         if (!photos.returnData.length) {
@@ -91,37 +93,56 @@ export default function Feed() {
           </p>
         }
       >
-        <div className={`${styles.gridImages} ${styles.animeLeft}`}>
-          {items.map((img, index) => {
-            if (indexImg === 5) {
-              indexImg = 0;
-            }
-            indexImg += 1;
+        <div className="mx-auto">
+          <ul className={`${styles.gridImages} ${styles.animeLeft}`}>
+            {items.map((img, index) => {
+              gridSpan = "";
+              indexImg += 1;
 
-            if (indexImg === 2) {
+              if (indexImg === 2) {
+                gridSpan = `${styles.gridSpan}`;
+              }
+
+              if (indexImg === 6) {
+                indexImg = 0;
+              }
+
               return (
-                <Image
+                <li
                   key={index}
-                  src={img.src}
-                  alt={img.id}
-                  className={`${styles.imageBig} ${styles.animeLeft}`}
-                  width={600}
-                  height={600}
-                />
+                  className={`${gridSpan} ${styles.animeLeft} group relative overflow-hidden hover:cursor-pointer`}
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.id}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    priority
+                  />
+
+                  {/* Image Hover Effect */}
+                  <div className="to-opacity-30 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-gradient-to-t from-gray-800 via-gray-800 opacity-0 group-hover:opacity-50"></div>
+                  <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center opacity-0 hover:opacity-100">
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/view.svg"
+                        alt="visualizações"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="w-4"
+                      />
+                      <p className="text-sm font-medium text-gray-200">
+                        152545
+                      </p>
+                    </div>
+                  </div>
+                  {/* End Image Hover Effect */}
+                </li>
               );
-            } else {
-              return (
-                <Image
-                  key={index}
-                  src={img.src}
-                  alt={img.id}
-                  className={`${styles.imgSmall} ${styles.animeLeft}`}
-                  width={300}
-                  height={300}
-                />
-              );
-            }
-          })}
+            })}
+          </ul>
         </div>
       </InfiniteScroll>
 

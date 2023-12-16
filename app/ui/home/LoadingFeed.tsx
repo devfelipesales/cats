@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import React from 'react';
-import { clsx } from 'clsx';
+import Image from "next/image";
+import React from "react";
+import { clsx } from "clsx";
 
 export default function LoadingFeed() {
   const [step, setStep] = React.useState(0);
@@ -22,42 +22,59 @@ export default function LoadingFeed() {
 
   return (
     <>
-      <div className='flex flex-col items-center mt-[100px]'>
+      <div className="mt-[100px] flex flex-col items-center">
         <Image
-          src='/foot.svg'
-          alt=''
-          width={67}
-          height={72}
-          className={clsx('ml-24 rotate-12 opacity-0 transition-opacity', {
-            'opacity-80': step === 4,
-          })}
+          src="/foot.svg"
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          priority
+          className={clsx(
+            "ml-24 h-auto w-16 rotate-12 opacity-0 transition-opacity",
+            {
+              "opacity-80": step === 4,
+            },
+          )}
         />
         <Image
-          src='/foot.svg'
-          alt=''
-          width={67}
-          height={72}
-          className={clsx('rotate-12 mr-10 opacity-0 transition-opacity', {
-            'opacity-80': step >= 3,
-          })}
+          src="/foot.svg"
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          className={clsx(
+            "mr-10 h-auto w-16 rotate-12 opacity-0 transition-opacity",
+            {
+              "opacity-80": step >= 3,
+            },
+          )}
         />
         <Image
-          src='/foot.svg'
-          alt=''
-          width={67}
-          height={72}
-          className={clsx('ml-24 rotate-12 opacity-0 transition-opacity', {
-            'opacity-80': step >= 2,
-          })}
+          src="/foot.svg"
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          className={clsx(
+            "ml-24 h-auto w-16 rotate-12 opacity-0 transition-opacity",
+            {
+              "opacity-80": step >= 2,
+            },
+          )}
         />
         <Image
-          src='/foot.svg'
-          alt=''
-          width={67}
-          height={72}
-          className={clsx('rotate-12 mr-10 opacity-0 transition-opacity', {
-            'opacity-80': step >= 1,
-          })}
+          src="/foot.svg"
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          className={clsx(
+            "mr-10 h-auto w-16 rotate-12 opacity-0 transition-opacity",
+            {
+              "opacity-80": step >= 1,
+            },
+          )}
         />
       </div>
     </>
