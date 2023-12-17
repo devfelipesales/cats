@@ -67,7 +67,7 @@ export default function PhotoContent({
             <p className="text-sm">123456</p>
           </div>
         </div>
-        <div className="flex">
+        <div className="mt-3 flex">
           <h1
             className={`${montSerrat.className} title break-all text-4xl md:text-5xl`}
           >

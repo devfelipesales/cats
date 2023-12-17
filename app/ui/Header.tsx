@@ -13,7 +13,6 @@ export default function Header() {
             height={0}
             sizes="100vw"
             className="h-auto w-20"
-            priority
           />
         </Link>
 
