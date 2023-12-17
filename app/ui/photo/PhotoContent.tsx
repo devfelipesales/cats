@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { grandStander } from "@/app/ui/fonts";
-import { montSerrat } from "@/app/ui/fonts";
+import { spectral } from "@/app/ui/fonts";
 
 export default function PhotoContent({
   data,
@@ -69,7 +69,7 @@ export default function PhotoContent({
         </div>
         <div className="mt-3 flex">
           <h1
-            className={`${montSerrat.className} title break-all text-4xl md:text-5xl`}
+            className={`${spectral.className} title break-all text-4xl md:text-5xl`}
           >
             Greuson
           </h1>
