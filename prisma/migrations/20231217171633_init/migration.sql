@@ -17,7 +17,6 @@ CREATE TABLE "Photos" (
     "name" VARCHAR(20) NOT NULL,
     "age" INTEGER NOT NULL,
     "weight" DECIMAL(2,1) NOT NULL,
-    "views" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Photos_pkey" PRIMARY KEY ("id")
@@ -34,6 +33,16 @@ CREATE TABLE "Comments" (
     CONSTRAINT "Comments_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Views" (
+    "id" TEXT NOT NULL,
+    "photoId" TEXT NOT NULL,
+    "viewedBy" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Views_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Users_profile_key" ON "Users"("profile");
 
@@ -48,3 +57,9 @@ ALTER TABLE "Comments" ADD CONSTRAINT "Comments_userId_fkey" FOREIGN KEY ("userI
 
 -- AddForeignKey
 ALTER TABLE "Comments" ADD CONSTRAINT "Comments_photoId_fkey" FOREIGN KEY ("photoId") REFERENCES "Photos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Views" ADD CONSTRAINT "Views_photoId_fkey" FOREIGN KEY ("photoId") REFERENCES "Photos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Views" ADD CONSTRAINT "Views_viewedBy_fkey" FOREIGN KEY ("viewedBy") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
