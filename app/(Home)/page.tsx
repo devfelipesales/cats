@@ -1,8 +1,8 @@
-import Feed from '../ui/home/Feed';
+import Feed from "../ui/feed/Feed";
 
 export default function Home() {
   return (
-    <main className='container'>
+    <main className="container">
       <Feed />
     </main>
   );

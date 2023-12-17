@@ -2,12 +2,14 @@
 
 import React from "react";
 import Image from "next/image";
-import styles from "@/app/(Home)/home.module.css";
+// import styles from "@/app/(Home)/feed.module.css";
+import styles from "@/app/ui/feed/Feed.module.css";
 
 import LoadingFeed from "./LoadingFeed";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "../Loader";
 import { listPhotos } from "@/app/lib/data";
+import FeedModal from "./FeedModal";
 
 type TReturnPhotos = {
   id: string;
@@ -20,9 +22,11 @@ export default function Feed() {
   const [hasMore, setHasMore] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
+  const [modal, setModal] = React.useState(false);
+  const [photoModal, setPhotoModal] = React.useState("");
   let indexImg = 0;
-  let classImgSize = "";
   let gridSpan = "";
+  let imgSize = "";
 
   React.useEffect(() => {
     const getData = () => {
@@ -80,8 +84,19 @@ export default function Feed() {
     }, 3000);
   };
 
+  function handleModal(event: React.MouseEvent) {
+    console.log("passou evento de chamar o modal");
+
+    setPhotoModal(items[3].src);
+    setModal(true);
+    window.document.body.classList.add("remove-scrolling");
+  }
+
   return (
     <>
+      {modal && (
+        <FeedModal modal={modal} setModal={setModal} src={photoModal} />
+      )}
       <InfiniteScroll
         dataLength={items.length}
         next={fetchMoreData}
@@ -94,13 +109,15 @@ export default function Feed() {
         }
       >
         <div className="mx-auto">
-          <ul className={`${styles.gridImages} ${styles.animeLeft}`}>
+          <ul className={`${styles.gridImages} animeLeft`}>
             {items.map((img, index) => {
               gridSpan = "";
+              imgSize = `${styles.imgSmall}`;
               indexImg += 1;
 
               if (indexImg === 2) {
                 gridSpan = `${styles.gridSpan}`;
+                imgSize = `${styles.imgBig}`;
               }
 
               if (indexImg === 6) {
@@ -110,7 +127,8 @@ export default function Feed() {
               return (
                 <li
                   key={index}
-                  className={`${gridSpan} ${styles.animeLeft} group relative overflow-hidden hover:cursor-pointer`}
+                  className={`${gridSpan} ${imgSize} animeLeft group relative overflow-hidden hover:cursor-pointer`}
+                  onClick={handleModal}
                 >
                   <Image
                     src={img.src}

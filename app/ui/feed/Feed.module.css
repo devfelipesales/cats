@@ -16,21 +16,16 @@
   grid-column: span 2;
 }
 
-.animeLeft {
-  opacity: 0;
-  transform: translateX(-30px);
-  animation: animeLeft ease-in 0.7s forwards;
+.imgSmall {
+  max-height: 294px;
 }
 
-@keyframes animeLeft {
-  to {
-    opacity: 1;
-    transform: initial;
-  }
+.imgBig {
+  max-height: 600px;
 }
 
 @media (max-width: 480px) {
   .gridImages {
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 }
