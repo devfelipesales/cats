@@ -3,5 +3,6 @@ declare namespace NodeJS {
     DATABASE_URL: string;
     SUPABASE_URL: string;
     SUPABASE_ANON_KEY: string;
+    NEXTAUTH_SECRET: string;
   }
 }
