@@ -27,6 +27,7 @@ model Photos {
   age       Int
   weight    Decimal    @db.Decimal(2, 1)
   createdAt DateTime   @default(now())
+  filepath  String
   comments  Comments[]
   views     Views[]
   
