@@ -49,9 +49,6 @@ export async function uploadPhoto(
   }
 
   try {
-    console.log("USERID --");
-    console.log(userId);
-
     const filepath = data.path;
     await prismaClient.photos.create({
       data: {

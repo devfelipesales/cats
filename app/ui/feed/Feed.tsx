@@ -2,22 +2,16 @@
 
 import React from "react";
 import Image from "next/image";
-// import styles from "@/app/(Home)/feed.module.css";
-import styles from "@/app/ui/feed/Feed.module.css";
-
 import LoadingFeed from "./LoadingFeed";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "../Loader";
-import { listPhotos } from "@/app/lib/data";
 import FeedModal from "./FeedModal";
+import { TPhotosFeed, listPhotos } from "@/app/lib/fetchData";
+import { ITEMS_PER_PAGE } from "@/app/lib/constants";
+import { clsx } from "clsx";
 
-type TReturnPhotos = {
-  id: string;
-  src: string;
-};
-
-export default function Feed() {
-  const [items, setItems] = React.useState<[] | TReturnPhotos[]>([]);
+export default function Feed({ userId }: { userId?: string }) {
+  const [items, setItems] = React.useState<[] | TPhotosFeed[]>([]);
   const [index, setIndex] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -25,27 +19,22 @@ export default function Feed() {
   const [modal, setModal] = React.useState(false);
   const [photoModal, setPhotoModal] = React.useState("");
   let indexImg = 0;
-  let gridSpan = "";
-  let imgSize = "";
 
   React.useEffect(() => {
     const getData = () => {
       setIsLoading(true);
       setTimeout(async () => {
         try {
-          const photos = await listPhotos(9, 0);
-
-          console.log(photos.returnData);
+          const photos = await listPhotos(0, userId);
 
           if (!photos.returnData.length) {
-            console.log("caiu no sem dados do fetch inicial");
             setHasMore(false);
             return;
           }
 
           setItems(photos.returnData);
         } catch (error) {
-          console.log(`Ocorreu um erro ${error}`);
+          console.error(`Erro: ${error}`);
         } finally {
           setIsLoading(false);
         }
@@ -53,41 +42,32 @@ export default function Feed() {
     };
 
     getData();
-  }, []);
+  }, [userId]);
 
   const fetchMoreData = () => {
     setIsLoadingMore(true);
 
     setTimeout(async () => {
       try {
-        console.log("Fez o Fetch do scroll");
-        console.log(index);
-
-        const photos = await listPhotos(9, index * 9);
-        console.log(photos.returnData);
+        const photos = await listPhotos(index * ITEMS_PER_PAGE, userId);
 
         if (!photos.returnData.length) {
-          console.log("caiu no sem dados do fetch do scroll");
           setHasMore(false);
           return;
         }
-        console.log("passou para setar os dados");
 
         setItems((prevItems) => [...prevItems, ...photos.returnData]);
       } catch (error) {
-        console.log(`Ocorreu um erro ${error}`);
+        console.error(`Ocorreu um erro ${error}`);
       } finally {
         setIsLoadingMore(false);
       }
-      console.log("atualizou o index");
       setIndex((prevIndex) => prevIndex + 1);
-    }, 3000);
+    }, 2000);
   };
 
   function handleModal(event: React.MouseEvent) {
-    console.log("passou evento de chamar o modal");
-
-    setPhotoModal(items[3].src);
+    setPhotoModal(items[1].src);
     setModal(true);
     window.document.body.classList.add("remove-scrolling");
   }
@@ -109,25 +89,29 @@ export default function Feed() {
         }
       >
         <div className="mx-auto">
-          <ul className={`${styles.gridImages} animeLeft`}>
+          <ul
+            className={`animeLeft grid grid-cols-2 gap-2 xs:gap-3 md:grid-cols-3`}
+          >
             {items.map((img, index) => {
-              gridSpan = "";
-              imgSize = `${styles.imgSmall}`;
+              // Início - Trecho de código apenas para telas maiores que 768px.
+              // A segunda foto é expandida a cada conjunto de 6 fotos.
               indexImg += 1;
 
-              if (indexImg === 2) {
-                gridSpan = `${styles.gridSpan}`;
-                imgSize = `${styles.imgBig}`;
-              }
-
+              // Reseta o index na 6ª foto
               if (indexImg === 6) {
                 indexImg = 0;
               }
-
+              // Fim ------------------------------------------------------------
               return (
                 <li
                   key={index}
-                  className={`${gridSpan} ${imgSize} animeLeft group relative overflow-hidden hover:cursor-pointer`}
+                  className={clsx(
+                    "animeLeft group relative h-full overflow-hidden hover:cursor-pointer md:h-[269px]",
+                    {
+                      "md:col-span-2 md:row-span-2 md:h-[550px]":
+                        indexImg === 2,
+                    },
+                  )}
                   onClick={handleModal}
                 >
                   <Image
@@ -136,6 +120,7 @@ export default function Feed() {
                     width={0}
                     height={0}
                     sizes="100vw"
+                    className="h-full w-full rounded object-cover"
                     priority
                   />
 
@@ -152,7 +137,7 @@ export default function Feed() {
                         className="w-4"
                       />
                       <p className="text-sm font-medium text-gray-200">
-                        152545
+                        {img.views}
                       </p>
                     </div>
                   </div>
