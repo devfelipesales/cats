@@ -25,7 +25,7 @@ model Photos {
   user      Users      @relation(fields: [userId], references: [id])
   name      String     @db.VarChar(20)
   age       Int
-  weight    Decimal    @db.Decimal(2, 1)
+  weight    Int
   createdAt DateTime   @default(now())
   filepath  String
   comments  Comments[]
