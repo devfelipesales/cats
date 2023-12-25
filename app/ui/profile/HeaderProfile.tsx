@@ -1,4 +1,5 @@
 import React from "react";
+import SignOutButton from "../SignOutButton";
 
 export default function HeaderProfile() {
   return (
@@ -8,7 +9,7 @@ export default function HeaderProfile() {
         <p className="border border-indigo-500 px-4 py-2">A</p>
         <p className="border border-indigo-500 px-4 py-2">B</p>
         <p className="border border-indigo-500 px-4 py-2">C</p>
-        <p className="border border-indigo-500 px-4 py-2">D</p>
+        <SignOutButton />
       </div>
     </div>
   );

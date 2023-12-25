@@ -2,45 +2,118 @@
 
 import { v4 as uuidv4 } from "uuid";
 import { supabase } from "./supabase";
+import { prismaClient } from "./prisma";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { hash } from "bcrypt";
+import { photoUploadValidation, userCreateValidation } from "./validations";
 
-export async function uploadPhoto(formData: FormData) {
-  console.log("Passou no Action");
-  console.log(formData);
+export type TUploadPhoto = {
+  errors: {
+    file?: string[] | undefined;
+    name?: string[] | undefined;
+    age?: string[] | undefined;
+    weight?: string[] | undefined;
+  };
+  message: string | null;
+  sucess: boolean;
+};
 
+export async function uploadPhoto(
+  userId: string,
+  prevState: TUploadPhoto,
+  formData: FormData,
+) {
   const file = formData.get("file");
-  const name = formData.get("name");
-  const age = formData.get("age");
-  const weight = formData.get("weight");
-  console.log(file);
-  console.log(name);
-  console.log(age);
-  console.log(weight);
+  const name = formData.get("name")?.toString().trim();
+  const age = Number(formData.get("age")?.toString());
+  const weight = Number(formData.get("weight")?.toString());
 
-  if (!file) {
-    return;
+  const returnState = await photoUploadValidation(file, name, age, weight);
+
+  if (!returnState.sucess) {
+    return returnState;
   }
 
-  const userId = "958912ab-2b99-4ebb-9072-e983af3b6f2f";
+  const photoName = uuidv4();
 
   const { data, error } = await supabase.storage
     .from("photos")
-    .upload(userId + "/" + uuidv4(), file);
-  // .upload(userId + "/" + name, file);
+    .upload(userId + "/" + photoName, file!);
 
-  if (data) {
-    // save filepath in database
+  if (!data) {
+    returnState.message = "Verifique a extensão e o tamanho do arquivo.";
+    returnState.sucess = false;
+    console.error(error);
+    return returnState;
+  }
+
+  try {
+    console.log("USERID --");
+    console.log(userId);
+
     const filepath = data.path;
-    console.log(data);
-    console.log(filepath);
+    await prismaClient.photos.create({
+      data: {
+        id: photoName,
+        userId: userId,
+        name: name as string,
+        age: age,
+        weight: weight,
+        filepath: filepath,
+      },
+    });
+  } catch (error) {
+    returnState.message = "Erro fazer upload do arquivo";
+    returnState.sucess = false;
+    console.error(error);
+    return returnState;
   }
 
-  if (error) {
-    console.log("Deu Erro");
-    console.log(error);
+  revalidatePath("/profile");
+  redirect("/profile");
+}
+
+export type TUserState = {
+  errors: {
+    user?: string[] | undefined;
+    email?: string[] | undefined;
+    password?: string[] | undefined;
+  };
+  message: string | null;
+  sucess: boolean;
+};
+
+export async function createUser(prevState: TUserState, formData: FormData) {
+  const user = formData.get("user")?.toString().toLowerCase().trim();
+  const email = formData.get("email")?.toString().toLowerCase().trim();
+  const password = formData.get("password")?.toString().trim();
+
+  const returnState = await userCreateValidation(user, email, password);
+
+  if (!returnState.sucess) {
+    return returnState;
   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
-  // revalidatePath('/profile');
-  // redirect('/profile');
-  // -------------------------------------------------------------------------
+  const hashedPassword = await hash(password as string, 10);
+
+  try {
+    await prismaClient.users.create({
+      data: {
+        profile: user!,
+        name: user!,
+        email: email!,
+        password: hashedPassword,
+      },
+    });
+  } catch (error) {
+    returnState.message = "Erro ao criar o usuário";
+    returnState.sucess = false;
+    console.error(error);
+    return returnState;
+  }
+
+  console.log("Usuário Criado com sucesso");
+  returnState.sucess = true;
+  return returnState;
 }

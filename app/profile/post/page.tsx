@@ -1,27 +1,20 @@
-import React from "react";
-import { uploadPhoto } from "../../lib/actions";
 import Image from "next/image";
-import Button from "../../ui/Button";
-import Input from "@/app/ui/Input";
-import InputFile from "@/app/ui/InputFile";
+import { TUser, authOptions } from "@/app/lib/auth";
+import { getServerSession } from "next-auth";
+import FormPost from "@/app/ui/post/FormPost";
 
-export default function ProfilePage() {
+export default async function PostPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session?.user) {
+    return;
+  }
+
+  const user = session?.user as TUser;
+
   return (
     <main className="flex flex-wrap justify-between gap-5">
-      <form className="flex flex-col gap-5" action={uploadPhoto}>
-        <Input type="text" labelText="Nome" name="name" />
-        <Input type="number" labelText="Idade" name="age" placeholder="0" />
-        <Input
-          type="number"
-          labelText="Peso"
-          name="weight"
-          placeholder="Digite o peso em kg"
-        />
-        <InputFile />
-        <div className="mt-3">
-          <Button type="submit">Enviar</Button>
-        </div>
-      </form>
+      <FormPost id={user.id} />
       <div>
         <Image
           // src="https://hltukherhizzxvjaqqcj.supabase.co/storage/v1/object/public/photos/958912ab-2b99-4ebb-9072-e983af3b6f2f/919a147b-59f6-42aa-8c2a-7c43d38805d6"

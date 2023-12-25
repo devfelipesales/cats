@@ -9,6 +9,7 @@
   margin-right: auto;
 }
 
+/* Retira scroll da página(de fundo) ao abrir o modal */
 .remove-scrolling {
   height: 100%;
   overflow: hidden;

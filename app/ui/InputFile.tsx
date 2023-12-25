@@ -9,6 +9,7 @@ export default function InputFile() {
         id="file"
         name="file"
         type="file"
+        accept="image/png, image/jpeg, image/svg+xml, image/gif"
       />
       <p
         className="ml-1 mt-1 text-sm text-gray-500 dark:text-gray-300"

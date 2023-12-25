@@ -21,8 +21,8 @@ export default function RootLayout({
       <body
         className={`${inter.className} box-border scroll-smooth antialiased`}
       >
-        <Header />
         <AuthProvider>
+          <Header />
           <div>{children}</div>
         </AuthProvider>
       </body>

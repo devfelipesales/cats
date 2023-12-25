@@ -26,5 +26,3 @@ export default function Input({
     </div>
   );
 }
-
-// className="block w-full max-w-md cursor-pointer rounded-lg border border-gray-300 bg-gray-100 text-sm text-gray-900 "

@@ -2,6 +2,11 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prismaClient } from "./prisma";
 import { compare } from "bcrypt";
+import { DefaultUser } from "next-auth";
+
+export type TUser = DefaultUser & {
+  profile: string;
+};
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -10,6 +15,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
@@ -45,6 +51,7 @@ export const authOptions: NextAuthOptions = {
           profile: user.profile,
           name: user.name,
           email: user.email,
+          image: user.image,
         };
       },
     }),
@@ -56,8 +63,9 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          id: token.id,
-        },
+          id: token.id as string,
+          profile: token.profile as string,
+        } as TUser,
       };
     },
     jwt: ({ token, user }) => {
@@ -67,6 +75,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
+          profile: u.profile,
         };
       }
       return token;
