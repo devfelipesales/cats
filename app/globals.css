@@ -4,7 +4,7 @@
 
 .container {
   max-width: 960px;
-  padding: 1.5rem;
+  padding: 0.75rem 0.5rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -26,8 +26,8 @@
 .title::after {
   content: "";
   display: block;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.4rem;
+  height: 1.4rem;
   background: #d8b4fe;
   position: absolute;
   bottom: 5px;
@@ -76,15 +76,15 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 480px) {
   .container {
-    padding: 0.75rem 0.5rem;
+    padding: 1.5rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .title::after {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 }

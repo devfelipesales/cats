@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import IconSignOut from "./Icons/IconSignOut";
+import IconSignOut from "../Icons/IconSignOut";
 
 export default function SignOutButton() {
   const router = useRouter();
@@ -13,12 +13,9 @@ export default function SignOutButton() {
   }
 
   return (
-    <button
-      onClick={HandleSignOut}
-      className="border border-indigo-500 px-4 py-2"
-      title="Sair"
-    >
+    <button onClick={HandleSignOut} title="Sair">
       <IconSignOut />
+      <p className="sm:hidden">Sair</p>
     </button>
   );
 }
