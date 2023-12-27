@@ -63,7 +63,7 @@ export default function NavProfile() {
           className={pathname === "/profile/post" ? styles.active : ""}
         >
           <IconPlus />
-          <p className="sm:hidden">Adicionar Fotos</p>
+          <p className="sm:hidden">Postar Foto</p>
         </Link>
         <Link
           href="/profile/stats"

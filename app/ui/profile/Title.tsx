@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { spectral } from "../fonts";
 
 const TITLES = {
-  "/profile": "Minha Conta",
+  "/profile": "Minhas Fotos",
   "/profile/post": "Postar Foto",
   "/profile/stats": "Estatísticas",
   "/profile/info": "Informações",
