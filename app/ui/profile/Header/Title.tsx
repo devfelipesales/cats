@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { spectral } from "../fonts";
+import { spectral } from "../../fonts";
 
 const TITLES = {
   "/profile": "Minhas Fotos",
@@ -15,7 +15,7 @@ export default function Title() {
 
   return (
     <h1
-      className={`${spectral.className} subtitle break-all text-4xl md:text-5xl`}
+      className={`${spectral.className} subtitle break-all text-4xl xs:text-5xl`}
     >
       {TITLES[pathname as keyof typeof TITLES]}
     </h1>

@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import IconGrid from "../Icons/IconGrid";
-import IconPlus from "../Icons/IconPlus";
-import IconChart from "../Icons/IconChart";
+import IconGrid from "../../Icons/IconGrid";
+import IconPlus from "../../Icons/IconPlus";
+import IconChart from "../../Icons/IconChart";
 import SignOutButton from "./SignOutButton";
 import { usePathname } from "next/navigation";
 import styles from "./NavProfile.module.css";
 
-import IconProfileInfo from "../Icons/IconProfileInfo";
+import IconProfileInfo from "../../Icons/IconProfileInfo";
 import React from "react";
 
 export default function NavProfile() {

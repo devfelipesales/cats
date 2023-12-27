@@ -1,4 +1,4 @@
-import HeaderProfile from "../ui/profile/HeaderProfile";
+import HeaderProfile from "../ui/profile/Header/HeaderProfile";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

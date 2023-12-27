@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import IconSignOut from "../Icons/IconSignOut";
+import IconSignOut from "../../Icons/IconSignOut";
 
 export default function SignOutButton() {
   const router = useRouter();
