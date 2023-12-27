@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { TUser, authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
 import FormPost from "@/app/ui/profile/Post/FormPost";
