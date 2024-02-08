@@ -93,6 +93,9 @@ export default function Page() {
             maxLength={20}
           />
         </div>
+        <p className="mt-1 text-[13px] font-medium text-gray-700">
+          (você não poderá alterar seu nome de usuário)
+        </p>
 
         {state.errors?.user ? (
           <div
