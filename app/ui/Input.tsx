@@ -1,6 +1,6 @@
 type InputProps = React.ComponentProps<"input"> & {
   name: string;
-  labelText: string;
+  labelText?: string;
 };
 
 export default function Input({
@@ -11,12 +11,15 @@ export default function Input({
 }: InputProps) {
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="mb-2 block text-sm font-medium text-gray-900"
-      >
-        {labelText}
-      </label>
+      {labelText && (
+        <label
+          htmlFor={name}
+          className="mb-2 block text-sm font-medium text-gray-900"
+        >
+          {labelText}
+        </label>
+      )}
+
       <input
         id={name}
         name={name}

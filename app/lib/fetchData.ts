@@ -7,11 +7,12 @@ import { unstable_noStore as noStore } from "next/cache";
 
 export type TPhotosFeed = {
   id: string;
+  name: string;
   src: string;
   views: number;
 };
 
-export async function listPhotos(offset?: number, userId?: string) {
+export async function fetchPhotos(offset?: number, userId?: string) {
   noStore();
 
   let returnData: TPhotosFeed[] = [];
@@ -21,6 +22,7 @@ export async function listPhotos(offset?: number, userId?: string) {
     take: ITEMS_PER_PAGE,
     select: {
       id: true,
+      name: true,
       filepath: true,
       _count: {
         select: {
@@ -44,7 +46,9 @@ export async function listPhotos(offset?: number, userId?: string) {
       const formatUrl = `${publicUrl}${photo.filepath}`;
       return {
         id: photo.id,
+        name: photo.name,
         src: formatUrl,
+
         views: photo._count.views,
       };
     });
@@ -53,4 +57,106 @@ export async function listPhotos(offset?: number, userId?: string) {
   return {
     returnData,
   };
+}
+
+export type TPhoto = {
+  id: string;
+  userId: string;
+  name: string;
+  age: number;
+  weight: number;
+  filepath: string;
+  user: {
+    id: string;
+    profile: string;
+  };
+  comments: {
+    id: string;
+    createdAt: Date;
+    user: {
+      id: string;
+      profile: string;
+    };
+    comment: string;
+  }[];
+  views: {
+    id: string;
+    user: {
+      id: string;
+      profile: string;
+    };
+  }[];
+  _count: {
+    views: number;
+  };
+} | null;
+// };
+
+export async function fetchPhotoById(id: string) {
+  noStore();
+
+  const photo = await prismaClient.photos.findUnique({
+    select: {
+      id: true,
+      userId: true,
+      name: true,
+      age: true,
+      weight: true,
+      filepath: true,
+
+      user: {
+        select: {
+          id: true,
+          profile: true,
+        },
+      },
+      comments: {
+        select: {
+          id: true,
+          comment: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+      views: {
+        distinct: "viewedBy",
+        select: {
+          id: true,
+          user: {
+            select: {
+              id: true,
+              profile: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          views: true,
+        },
+      },
+    },
+    where: {
+      id: id,
+    },
+  });
+
+  if (photo) {
+    const publicUrl = await supabase.storage.from("photos").getPublicUrl("")
+      .data.publicUrl;
+
+    const formatUrl = `${publicUrl}${photo.filepath}`;
+
+    photo.filepath = formatUrl;
+  }
+
+  return photo;
 }

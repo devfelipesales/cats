@@ -6,7 +6,7 @@ import LoadingFeed from "./LoadingFeed";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loader from "../Loader";
 import FeedModal from "./FeedModal";
-import { TPhotosFeed, listPhotos } from "@/app/lib/fetchData";
+import { TPhotosFeed, fetchPhotos } from "@/app/lib/fetchData";
 import { ITEMS_PER_PAGE } from "@/app/lib/constants";
 import { clsx } from "clsx";
 
@@ -25,7 +25,7 @@ export default function Feed({ userId }: { userId?: string }) {
       setIsLoading(true);
       setTimeout(async () => {
         try {
-          const photos = await listPhotos(0, userId);
+          const photos = await fetchPhotos(0, userId);
 
           if (!photos.returnData.length) {
             setHasMore(false);
@@ -49,7 +49,7 @@ export default function Feed({ userId }: { userId?: string }) {
 
     setTimeout(async () => {
       try {
-        const photos = await listPhotos(index * ITEMS_PER_PAGE, userId);
+        const photos = await fetchPhotos(index * ITEMS_PER_PAGE, userId);
 
         if (!photos.returnData.length) {
           setHasMore(false);
@@ -65,18 +65,20 @@ export default function Feed({ userId }: { userId?: string }) {
       setIndex((prevIndex) => prevIndex + 1);
     }, 2000);
   };
-
-  function handleModal(event: React.MouseEvent) {
-    setPhotoModal(items[1].src);
+  // React.MouseEvent
+  function handleModal({
+    currentTarget,
+  }: {
+    currentTarget: EventTarget & HTMLLIElement;
+  }) {
+    setPhotoModal(currentTarget.id);
     setModal(true);
     window.document.body.classList.add("remove-scrolling");
   }
 
   return (
     <>
-      {modal && (
-        <FeedModal modal={modal} setModal={setModal} src={photoModal} />
-      )}
+      {modal && <FeedModal setModal={setModal} photoId={photoModal} />}
       <InfiniteScroll
         dataLength={items.length}
         next={fetchMoreData}
@@ -104,7 +106,8 @@ export default function Feed({ userId }: { userId?: string }) {
               // Fim ------------------------------------------------------------
               return (
                 <li
-                  key={index}
+                  key={img.id}
+                  id={img.id}
                   className={clsx(
                     "animeLeft group relative h-full overflow-hidden hover:cursor-pointer md:h-[269px]",
                     {
@@ -113,10 +116,11 @@ export default function Feed({ userId }: { userId?: string }) {
                     },
                   )}
                   onClick={handleModal}
+                  // onClick={({currentTarget}) => currentTarget.id}
                 >
                   <Image
                     src={img.src}
-                    alt={img.id}
+                    alt={img.name}
                     width={0}
                     height={0}
                     sizes="100vw"

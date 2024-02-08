@@ -3,27 +3,35 @@
 import React from "react";
 import PhotoContent from "../photo/PhotoContent";
 import styles from "@/app/ui/feed/FeedModal.module.css";
+import { TPhoto, fetchPhotoById } from "@/app/lib/fetchData";
+import FailureAlert from "../FailureAlert";
 
 export default function FeedModal({
-  modal,
   setModal,
-  src,
+  photoId,
 }: {
-  modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  src: string;
+  photoId: string;
 }) {
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [photoModal, setPhotoModal] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [photo, setPhoto] = React.useState<TPhoto | null>(null);
 
-  // Fetch Data!!
+  React.useEffect(() => {
+    async function fetchData() {
+      const data = await fetchPhotoById(photoId);
+
+      if (!data) {
+        setError("Erro ao abrir a foto");
+        return;
+      }
+      setPhoto(data);
+    }
+    fetchData();
+  }, [photoId]);
 
   function handleOutsideClick(event: React.MouseEvent) {
     if (event.target === event.currentTarget) {
-      console.log("evento de sair do modal");
-
-      setPhotoModal("");
       setModal(false);
       window.document.body.classList.remove("remove-scrolling");
     }
@@ -31,10 +39,9 @@ export default function FeedModal({
 
   return (
     <section className={`${styles.modal}`} onClick={handleOutsideClick}>
-      {/* {error && <ErrorMessage error={error} />} */}
+      {error && <FailureAlert text={error} />}
       {/* {loading && <Loading />} */}
-      {/* {photoModal && <PhotoContent data={src} />} */}
-      <PhotoContent data={src} setModal={setModal} />
+      <PhotoContent photo={photo} setModal={setModal} />
     </section>
   );
 }

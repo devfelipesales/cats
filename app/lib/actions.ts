@@ -114,3 +114,23 @@ export async function createUser(prevState: TUserState, formData: FormData) {
   returnState.sucess = true;
   return returnState;
 }
+
+export async function createComment(
+  userId: string,
+  photoId: string,
+  comment: string,
+) {
+  try {
+    const data = await prismaClient.comments.create({
+      data: {
+        userId: userId,
+        photoId: photoId,
+        comment: comment,
+      },
+    });
+    revalidatePath("/");
+    return data;
+  } catch (error) {
+    console.error("Erro ao criar o comentário");
+  }
+}
