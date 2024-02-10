@@ -150,7 +150,11 @@ export default function PhotoContent({
       <section className="relative flex h-full flex-1 flex-col gap-3">
         <div className="flex flex-col gap-2 px-4 pt-5 text-indigo-700 opacity-80 lg:flex-row lg:justify-between">
           <Link
-            href="#"
+            href={`/${photo?.user.profile}`}
+            onClick={() => {
+              setModal(false);
+              window.document.body.classList.remove("remove-scrolling");
+            }}
             className={`${grandStander.className} underline transition-colors hover:text-indigo-400`}
           >
             @{photo?.user.profile}
@@ -192,7 +196,7 @@ export default function PhotoContent({
                 {photo?.name}
               </h1>
             </div>
-            <div className="xxs:flex-row mb-5 mt-3 flex flex-col gap-5 px-4 text-lg font-semibold text-indigo-950">
+            <div className="mb-5 mt-3 flex flex-col gap-5 px-4 text-lg font-semibold text-indigo-950 xxs:flex-row">
               <p>| {photo?.weight}kg</p>
               <p>| {photo?.age} anos</p>
             </div>
@@ -230,9 +234,18 @@ export default function PhotoContent({
                     <div
                       className={`${grandStander.className} flex flex-col gap-5 rounded-lg bg-gradient-to-r from-blue-200 to-purple-300 px-4 py-3 text-sm`}
                     >
-                      <span className="inline cursor-pointer font-bold text-indigo-800 underline hover:text-indigo-400">
+                      <Link
+                        href={`/${photo?.user.profile}`}
+                        onClick={() => {
+                          setModal(false);
+                          window.document.body.classList.remove(
+                            "remove-scrolling",
+                          );
+                        }}
+                        className="inline cursor-pointer font-bold text-indigo-800 underline hover:text-indigo-400"
+                      >
                         @{photo.user.profile}:
-                      </span>
+                      </Link>
                       <p>{comment.comment}</p>
                     </div>
                     <p

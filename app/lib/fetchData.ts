@@ -90,7 +90,6 @@ export type TPhoto = {
     views: number;
   };
 } | null;
-// };
 
 export async function fetchPhotoById(id: string) {
   noStore();
@@ -159,4 +158,23 @@ export async function fetchPhotoById(id: string) {
   }
 
   return photo;
+}
+
+export type TUser = {
+  id: string;
+  name: string;
+} | null;
+
+export async function fetchIdByProfile(profile: string) {
+  const user: TUser = await prismaClient.users.findUnique({
+    select: {
+      id: true,
+      name: true,
+    },
+    where: {
+      profile: profile,
+    },
+  });
+
+  return user;
 }
