@@ -5,10 +5,12 @@ export const grandStander = Grandstander({
   weight: ["400", "700"],
   style: ["italic", "normal"],
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const spectral = Spectral({
   weight: ["400", "700"],
   style: ["italic", "normal"],
   subsets: ["latin"],
+  display: "swap",
 });

@@ -31,8 +31,11 @@ export default function Feed({ userId }: { userId?: string }) {
 
         if (!photos.returnData.length) {
           setHasMore(false);
-          setIsLoading(false);
           return;
+        }
+
+        if (photos.returnData.length < ITEMS_PER_PAGE) {
+          setHasMore(false);
         }
 
         setItems(photos.returnData);
@@ -60,7 +63,6 @@ export default function Feed({ userId }: { userId?: string }) {
 
       if (!photos.returnData.length) {
         setHasMore(false);
-        setIsLoadingMore(false);
         return;
       }
 
