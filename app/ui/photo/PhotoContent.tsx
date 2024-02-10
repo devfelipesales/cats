@@ -235,7 +235,7 @@ export default function PhotoContent({
                       className={`${grandStander.className} flex flex-col gap-5 rounded-lg bg-gradient-to-r from-blue-200 to-purple-300 px-4 py-3 text-sm`}
                     >
                       <Link
-                        href={`/${photo?.user.profile}`}
+                        href={`/${comment.user.profile}`}
                         onClick={() => {
                           setModal(false);
                           window.document.body.classList.remove(
@@ -244,7 +244,7 @@ export default function PhotoContent({
                         }}
                         className="inline cursor-pointer font-bold text-indigo-800 underline hover:text-indigo-400"
                       >
-                        @{photo.user.profile}:
+                        @{comment.user.profile}:
                       </Link>
                       <p>{comment.comment}</p>
                     </div>
