@@ -1,25 +1,18 @@
-"use client";
-
-import { TUser, fetchIdByProfile } from "@/app/lib/fetchData";
+import { fetchIdByProfile } from "@/app/lib/fetchData";
 import Feed from "@/app/ui/feed/Feed";
 import { spectral } from "@/app/ui/fonts";
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function UserPage({ params }: { params: { username: string } }) {
-  const [user, setUser] = useState<TUser | null>(null);
+export default async function UserPage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const user = await fetchIdByProfile(params.username);
 
-  useEffect(() => {
-    async function fetchData() {
-      const user = await fetchIdByProfile(params.username);
-
-      if (!user?.id) {
-        notFound();
-      }
-      setUser(user);
-    }
-    fetchData();
-  }, [params.username]);
+  if (!user?.id) {
+    notFound();
+  }
 
   return (
     <div className="container">
