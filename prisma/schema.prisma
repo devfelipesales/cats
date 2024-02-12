@@ -47,7 +47,7 @@ model Views {
   id          String   @id @default(uuid())
   photoId     String
   photo       Photos   @relation(fields: [photoId], references: [id])
-  viewedBy    String   
-  user        Users    @relation(fields: [viewedBy], references: [id])
+  viewedBy    String?   
+  user        Users?    @relation(fields: [viewedBy], references: [id])
   createdAt   DateTime @default(now())
 }
