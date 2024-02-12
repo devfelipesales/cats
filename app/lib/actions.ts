@@ -134,3 +134,17 @@ export async function createComment(
     console.error("Erro ao criar o comentário");
   }
 }
+
+export async function addCountView(photoId: string, userId: string) {
+  try {
+    const data = await prismaClient.views.create({
+      data: {
+        photoId: photoId,
+        viewedBy: userId,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error("Erro ao criar a visualização");
+  }
+}

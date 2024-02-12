@@ -9,6 +9,9 @@ import FeedModal from "./FeedModal";
 import { TPhotosFeed, fetchPhotos } from "@/app/lib/fetchData";
 import { ITEMS_PER_PAGE } from "@/app/lib/constants";
 import { clsx } from "clsx";
+import { useSession } from "next-auth/react";
+import { TUser } from "@/app/lib/auth";
+import { addCountView } from "@/app/lib/actions";
 
 export default function Feed({ userId }: { userId?: string }) {
   const [items, setItems] = React.useState<[] | TPhotosFeed[]>([]);
@@ -20,6 +23,9 @@ export default function Feed({ userId }: { userId?: string }) {
   const [photoModal, setPhotoModal] = React.useState("");
   const isComponentMounted = useRef(false);
   let indexImg = 0;
+
+  const { status, data } = useSession();
+  const user = data?.user as TUser;
 
   React.useEffect(() => {
     isComponentMounted.current = true;
@@ -75,11 +81,23 @@ export default function Feed({ userId }: { userId?: string }) {
     setIndex((prevIndex) => prevIndex + 1);
   };
 
-  function handleModal({
+  async function handleModal({
     currentTarget,
   }: {
     currentTarget: EventTarget & HTMLLIElement;
   }) {
+    if (status === "authenticated") {
+      await addCountView(currentTarget.id, user.id);
+
+      const newItems = items.map((img) => {
+        if (img.id === currentTarget.id) {
+          img.views += 1;
+        }
+        return img;
+      });
+      setItems(newItems);
+    }
+
     setPhotoModal(currentTarget.id);
     setModal(true);
     window.document.body.classList.add("remove-scrolling");
