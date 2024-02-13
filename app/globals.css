@@ -50,6 +50,22 @@
   width: 3rem;
   border-radius: 0.2rem;
 }
+
+.title3 {
+  line-height: 1;
+  letter-spacing: 0.015em;
+  font-weight: bold;
+}
+
+.title3::before {
+  content: "";
+  display: block;
+  background: #d8b4fe;
+  height: 8px;
+  width: 12px;
+  /* border-radius: 0.2rem; */
+}
+
 .animeLeft {
   opacity: 0;
   transform: translateX(-30px);

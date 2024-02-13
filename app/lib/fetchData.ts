@@ -1,6 +1,6 @@
 "use server";
 
-import { ITEMS_PER_PAGE } from "./constants";
+import { ITEMS_PER_PAGE, TOP_VIEWED_PHOTOS } from "./constants";
 import { prismaClient } from "./prisma";
 import { supabase } from "./supabase";
 import { unstable_noStore as noStore } from "next/cache";
@@ -57,6 +57,78 @@ export async function fetchPhotos(offset?: number, userId?: string) {
   return {
     returnData,
   };
+}
+
+export async function fetchMostViwedPhotos(userId: string) {
+  noStore();
+
+  let returnData: TPhotosFeed[] = [];
+
+  const photos = await prismaClient.photos.findMany({
+    take: TOP_VIEWED_PHOTOS,
+
+    select: {
+      id: true,
+      name: true,
+      filepath: true,
+      _count: {
+        select: {
+          views: true,
+        },
+      },
+    },
+    where: {
+      userId: userId,
+    },
+
+    orderBy: {
+      views: {
+        _count: "desc",
+      },
+    },
+  });
+
+  if (photos) {
+    const publicUrl = await supabase.storage.from("photos").getPublicUrl("")
+      .data.publicUrl;
+
+    returnData = photos.map((photo) => {
+      const formatUrl = `${publicUrl}${photo.filepath}`;
+      return {
+        id: photo.id,
+        name: photo.name,
+        src: formatUrl,
+        views: photo._count.views,
+      };
+    });
+  }
+
+  return {
+    returnData,
+  };
+}
+
+export async function fetchCountViews(userId: string) {
+  const data = await prismaClient.photos.findMany({
+    select: {
+      _count: {
+        select: {
+          views: true,
+        },
+      },
+    },
+    where: {
+      userId: userId,
+    },
+  });
+
+  if (data) {
+    const sumViews = data.reduce((total, item) => {
+      return (total += item._count.views);
+    }, 0);
+
+    return sumViews;
+  }
 }
 
 export type TPhoto = {

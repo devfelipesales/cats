@@ -86,6 +86,7 @@ export default function Feed({ userId }: { userId?: string }) {
   }: {
     currentTarget: EventTarget & HTMLLIElement;
   }) {
+    // Only counts views for logged in users
     if (status === "authenticated") {
       await addCountView(currentTarget.id, user.id);
 
