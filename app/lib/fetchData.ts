@@ -238,6 +238,7 @@ export type TUser = {
 } | null;
 
 export async function fetchIdByProfile(profile: string) {
+  noStore();
   const user: TUser = await prismaClient.users.findUnique({
     select: {
       id: true,

@@ -1,12 +1,15 @@
 type InputProps = React.ComponentProps<"input"> & {
   name: string;
   labelText?: string;
+  labelClass?: string;
+  inputClass?: string;
 };
 
 export default function Input({
   children,
   name,
   labelText,
+  labelClass,
   ...props
 }: InputProps) {
   return (
@@ -14,7 +17,7 @@ export default function Input({
       {labelText && (
         <label
           htmlFor={name}
-          className="mb-2 block text-sm font-medium text-gray-900"
+          className={`mb-2 block text-sm font-medium text-gray-900 ${labelClass}`}
         >
           {labelText}
         </label>
@@ -24,7 +27,7 @@ export default function Input({
         id={name}
         name={name}
         {...props}
-        className="block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-sm text-gray-900  hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600"
+        className={`block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-sm text-gray-900 hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600 ${props.className}`}
       />
     </div>
   );

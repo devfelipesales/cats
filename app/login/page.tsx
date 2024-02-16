@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import FailureAlert from "../ui/FailureAlert";
+import { Spinner } from "flowbite-react";
 
 interface CustomElements extends HTMLFormControlsCollection {
   user: HTMLInputElement;
@@ -78,7 +79,9 @@ export default function LoginPage() {
       {error && <FailureAlert text={error} />}
 
       <div className="mt-3">
-        <Button type="submit">Entrar</Button>
+        <Button loading={loading} type="submit">
+          {loading ? <Spinner color="purple" /> : "Entrar"}
+        </Button>
       </div>
 
       <div className="mt-10">

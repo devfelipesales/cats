@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 import { spectral } from "@/app/ui/fonts";
 import FailureAlert from "@/app/ui/FailureAlert";
 import Button from "@/app/ui/Button";
-import { Tooltip } from "flowbite-react";
+import { Spinner, Tooltip } from "flowbite-react";
 import { createUser, TUserState } from "@/app/lib/actions";
 import IconInfo from "@/app/ui/Icons/IconInfo";
 
@@ -196,7 +196,9 @@ export default function Page() {
       {state?.message && <FailureAlert text={state.message} />}
 
       <div className="mt-3">
-        <Button type="submit">Cadastrar</Button>
+        <Button loading={loading} type="submit">
+          {loading ? <Spinner color="purple" /> : "Cadastrar"}
+        </Button>
       </div>
     </form>
   );

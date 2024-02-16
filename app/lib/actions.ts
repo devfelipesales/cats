@@ -148,3 +148,22 @@ export async function addCountView(photoId: string, userId: string) {
     console.error("Erro ao criar a visualização");
   }
 }
+
+export async function updateUserName(userId: string, name: string) {
+  let messageError: string = "";
+
+  try {
+    await prismaClient.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name: name,
+      },
+    });
+  } catch (error) {
+    console.error(`Erro ${error}`);
+    messageError = "Erro ao atualizar o nome";
+    return messageError;
+  }
+}
