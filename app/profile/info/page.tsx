@@ -86,7 +86,7 @@ export default function InfoProfile() {
         name="profile"
         labelText="Usuário"
         labelClass="text-indigo-900"
-        className="hover:ring-0 hover:ring-inherit focus:ring-0"
+        className="cursor-not-allowed hover:ring-0 hover:ring-transparent focus:ring-0"
         disabled
         value={user?.profile}
       />
@@ -108,7 +108,7 @@ export default function InfoProfile() {
           className={`block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-sm text-gray-900 hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600`}
         />
         <p className="mt-1 text-[13px] font-medium italic text-gray-700">
-          (nome exibido ao acessar seu perfil)
+          (nome exibido ao acessarem o seu perfil)
         </p>
       </div>
 

@@ -49,7 +49,7 @@ export default function Stats({ userId }: { userId: string }) {
             return (
               <li key={photo.id} className="flex flex-col  gap-2">
                 <div className="flex items-center justify-between gap-4 px-2">
-                  <p className="font-bold text-indigo-700 xs:text-lg">
+                  <p className="text-sm font-bold text-indigo-700 xs:text-base sm:text-lg">
                     {photo.name}
                   </p>
                   <div className="flex gap-2">

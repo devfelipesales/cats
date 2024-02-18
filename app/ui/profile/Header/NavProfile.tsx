@@ -53,6 +53,7 @@ export default function NavProfile() {
       >
         <Link
           href="/profile"
+          title="Minhas Fotos"
           className={pathname === "/profile" ? styles.active : ""}
         >
           <IconGrid />
@@ -60,6 +61,7 @@ export default function NavProfile() {
         </Link>
         <Link
           href="/profile/post"
+          title="Postar Foto"
           className={pathname === "/profile/post" ? styles.active : ""}
         >
           <IconPlus />
@@ -67,6 +69,7 @@ export default function NavProfile() {
         </Link>
         <Link
           href="/profile/stats"
+          title="Estatísticas"
           className={pathname === "/profile/stats" ? styles.active : ""}
         >
           <IconChart />
@@ -74,6 +77,7 @@ export default function NavProfile() {
         </Link>
         <Link
           href="/profile/info"
+          title="Informações"
           className={pathname === "/profile/info" ? styles.active : ""}
         >
           <IconProfileInfo />
