@@ -129,7 +129,9 @@ export default function Feed({ userId }: { userId?: string }) {
           loader={isLoadingMore && <Loader />}
           endMessage={
             <p className="py-8 text-center text-slate-400">
-              Não existem mais postagens.
+              {items.length > 0
+                ? "Não existem mais postagens."
+                : "Você não possui nenhuma foto postada."}
             </p>
           }
         >
