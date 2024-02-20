@@ -33,7 +33,9 @@ export default function FeedModal({
   function handleOutsideClick(event: React.MouseEvent) {
     if (event.target === event.currentTarget) {
       setModal(false);
-      window.document.body.classList.remove("remove-scrolling");
+      if (typeof window !== "undefined") {
+        window.document.body.classList.remove("remove-scrolling");
+      }
     }
   }
 

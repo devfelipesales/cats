@@ -107,7 +107,9 @@ export default function Feed({ userId }: { userId?: string }) {
 
     setPhotoModal(currentTarget.id);
     setModal(true);
-    window.document.body.classList.add("remove-scrolling");
+    if (typeof window !== "undefined") {
+      window.document.body.classList.add("remove-scrolling");
+    }
   }
 
   return (

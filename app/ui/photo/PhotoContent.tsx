@@ -30,8 +30,6 @@ export default function PhotoContent({
   photo: TPhoto;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  console.log(photo);
-
   const inputComment = React.useRef<HTMLInputElement>(null);
   const IconSend = React.useRef<SVGSVGElement>(null);
   const SectionScroll = React.useRef<HTMLElement>(null);
@@ -42,7 +40,9 @@ export default function PhotoContent({
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setModal(false);
-        window.document.body.classList.remove("remove-scrolling");
+        if (typeof window !== "undefined") {
+          window.document.body.classList.remove("remove-scrolling");
+        }
       }
     },
     [setModal],
@@ -153,7 +153,9 @@ export default function PhotoContent({
             href={`/${photo?.user.profile}`}
             onClick={() => {
               setModal(false);
-              window.document.body.classList.remove("remove-scrolling");
+              if (typeof window !== "undefined") {
+                window.document.body.classList.remove("remove-scrolling");
+              }
             }}
             className={`${grandStander.className} underline transition-colors hover:text-indigo-400`}
           >
@@ -167,7 +169,9 @@ export default function PhotoContent({
             title="Clique ou pressione Esc para fechar"
             onClick={() => {
               setModal(false);
-              window.document.body.classList.remove("remove-scrolling");
+              if (typeof window !== "undefined") {
+                window.document.body.classList.remove("remove-scrolling");
+              }
             }}
             className="absolute right-0 top-0 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-s-lg bg-gradient-to-r from-blue-200 to-purple-300 text-sm text-indigo-800 hover:text-white lg:hidden"
           >
@@ -238,9 +242,11 @@ export default function PhotoContent({
                         href={`/${comment.user.profile}`}
                         onClick={() => {
                           setModal(false);
-                          window.document.body.classList.remove(
-                            "remove-scrolling",
-                          );
+                          if (typeof window !== "undefined") {
+                            window.document.body.classList.remove(
+                              "remove-scrolling",
+                            );
+                          }
                         }}
                         className="inline cursor-pointer font-bold text-indigo-800 underline hover:text-indigo-400"
                       >

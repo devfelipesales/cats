@@ -31,9 +31,14 @@ export default function NavProfile() {
   }
 
   React.useEffect(() => {
-    window.addEventListener("click", handleOutsideClick);
+    if (typeof window !== "undefined") {
+      window.addEventListener("click", handleOutsideClick);
+    }
+
     return () => {
-      window.removeEventListener("click", handleOutsideClick);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("click", handleOutsideClick);
+      }
     };
   }, []);
 
