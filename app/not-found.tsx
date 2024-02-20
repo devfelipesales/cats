@@ -7,7 +7,6 @@ export default function NotFound() {
       <IconFaceFrown />
 
       <h2 className="text-xl font-semibold">404 - Página não encontrada</h2>
-      <p className="text-red-600">Não foi possível encontrar o usuário</p>
       <Link
         href="/"
         className="mt-4 rounded-md bg-gradient-to-r from-blue-200 to-purple-300 px-6 py-3  font-medium text-black transition-colors hover:text-white"
