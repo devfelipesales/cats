@@ -136,7 +136,7 @@ export default function PhotoContent({
   }
 
   return (
-    <section className="animeBottom relative mx-auto flex w-full max-w-[960px] flex-col rounded bg-white transition-all lg:flex-row">
+    <section className="animeBottom relative mx-auto flex h-[90%] w-full max-w-[960px] flex-col rounded bg-white transition-all lg:h-full lg:flex-row">
       <Image
         id={photo?.id}
         src={photo?.filepath}
