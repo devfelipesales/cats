@@ -33,6 +33,10 @@ export default function Feed({ userId }: { userId?: string }) {
   React.useEffect(() => {
     isComponentMounted.current = true;
 
+    if (typeof window !== "undefined") {
+      window.document.body.classList.remove("remove-scrolling");
+    }
+
     const getData = async () => {
       setIsLoading(true);
       try {
