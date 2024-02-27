@@ -19,12 +19,13 @@ export default function FeedModal({
 
   React.useEffect(() => {
     async function fetchData() {
-      const data = await fetchPhotoById(photoId);
+      const data = (await fetchPhotoById(photoId)) as TPhoto;
 
       if (!data) {
         setError("Erro ao abrir a foto");
         return;
       }
+
       setPhoto(data);
     }
     fetchData();
