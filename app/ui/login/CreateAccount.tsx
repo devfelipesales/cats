@@ -91,6 +91,7 @@ export default function CreateAccount() {
             aria-describedby="user-error"
             className="block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 ps-10 text-sm lowercase  text-gray-900 hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600"
             maxLength={20}
+            required
           />
         </div>
         <p className="mt-1 text-[13px] font-medium text-gray-700">
@@ -135,6 +136,7 @@ export default function CreateAccount() {
             type="email"
             id="email"
             name="email"
+            required
             aria-describedby="email-error"
             className="block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 ps-10 text-sm lowercase  text-gray-900 hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600"
           />
@@ -177,6 +179,7 @@ export default function CreateAccount() {
             type="password"
             id="password"
             name="password"
+            required
             aria-describedby="password-error"
             className="block w-full max-w-md rounded-lg border border-gray-300 bg-gray-100 p-2.5 ps-10 text-sm text-gray-600  hover:ring-1 hover:ring-indigo-600 focus:ring-indigo-600"
           />

@@ -2,7 +2,7 @@ import { TUploadPhoto, TUserState } from "./actions";
 import { checkEmail, checkUser } from "./utils";
 
 export async function userCreateValidation(
-  name: string | undefined,
+  user: string | undefined,
   email: string | undefined,
   password: string | undefined,
 ) {
@@ -12,14 +12,14 @@ export async function userCreateValidation(
     sucess: false,
   };
 
-  if (!name) {
-    returnState.errors.user?.push("Preecha o usuário");
+  if (!user) {
+    returnState.errors.user?.push("Preencha o usuário");
   } else {
     const regexp = /^\S*$/u; // Regex p/ verificação de espaços entre palavras
-    if (!regexp.test(name)) {
+    if (!regexp.test(user)) {
       returnState.errors.user?.push("Espaços não são permitidos");
     }
-    if (name.length > 20) {
+    if (user.length > 20) {
       returnState.errors.user?.push("Máximo de 20 caracteres");
     }
   }
@@ -40,7 +40,7 @@ export async function userCreateValidation(
   }
 
   if (returnState.errors.user?.length === 0) {
-    const userExists = await checkUser(name!);
+    const userExists = await checkUser(user!);
 
     if (userExists) {
       returnState.errors.user?.push("Usuário já cadastrado");

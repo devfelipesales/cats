@@ -3,12 +3,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prismaClient } from "./prisma";
 import { compare } from "bcrypt";
 import { DefaultUser } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+// import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 export type TUser = DefaultUser & {
   profile: string;
 };
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prismaClient),
+
   pages: {
     signIn: "/login",
   },
@@ -17,8 +22,11 @@ export const authOptions: NextAuthOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     CredentialsProvider({
       // name: "Sign-in2",
       credentials: {
@@ -29,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.user || !credentials?.password) {
           return null;
         }
-        const user = await prismaClient.users.findFirst({
+        const user = await prismaClient.user.findFirst({
           where: {
             OR: [
               {
@@ -42,7 +50,10 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        if (!user || !(await compare(credentials.password, user.password))) {
+        if (
+          !user ||
+          !(await compare(credentials.password, user.password as string))
+        ) {
           return null;
         }
 

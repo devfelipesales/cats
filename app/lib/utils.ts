@@ -1,7 +1,7 @@
 import { prismaClient } from "./prisma";
 
 export async function checkUser(user: string) {
-  const db_user = await prismaClient.users.findFirst({
+  const db_user = await prismaClient.user.findFirst({
     where: {
       profile: user,
     },
@@ -13,7 +13,7 @@ export async function checkUser(user: string) {
 }
 
 export async function checkEmail(email: string) {
-  const db_user = await prismaClient.users.findFirst({
+  const db_user = await prismaClient.user.findFirst({
     where: {
       email: email,
     },

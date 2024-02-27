@@ -239,7 +239,7 @@ export type TUser = {
 
 export async function fetchIdByProfile(profile: string) {
   noStore();
-  const user: TUser = await prismaClient.users.findUnique({
+  const user: TUser = await prismaClient.user.findFirst({
     select: {
       id: true,
       name: true,
@@ -250,4 +250,18 @@ export async function fetchIdByProfile(profile: string) {
   });
 
   return user;
+}
+
+export async function fetchProfileById(userId: string) {
+  noStore();
+  const profile = await prismaClient.user.findUnique({
+    select: {
+      profile: true,
+    },
+    where: {
+      id: userId,
+    },
+  });
+
+  return profile;
 }

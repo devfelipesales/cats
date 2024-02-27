@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { hash } from "bcrypt";
 import { photoUploadValidation, userCreateValidation } from "./validations";
+import { checkUser } from "./utils";
 
 export type TUploadPhoto = {
   errors: {
@@ -95,7 +96,7 @@ export async function createUser(prevState: TUserState, formData: FormData) {
   const hashedPassword = await hash(password as string, 10);
 
   try {
-    await prismaClient.users.create({
+    await prismaClient.user.create({
       data: {
         profile: user!,
         name: user!,
@@ -153,7 +154,7 @@ export async function updateUserName(userId: string, name: string) {
   let messageError: string = "";
 
   try {
-    await prismaClient.users.update({
+    await prismaClient.user.update({
       where: {
         id: userId,
       },
@@ -164,6 +165,43 @@ export async function updateUserName(userId: string, name: string) {
   } catch (error) {
     console.error(`Erro ${error}`);
     messageError = "Erro ao atualizar o nome";
+    return messageError;
+  }
+}
+
+export async function updateProfile(userId: string, profile: string) {
+  let messageError: string = "";
+
+  const user = profile.toLowerCase().trim();
+  const userExists = await checkUser(user);
+
+  if (userExists) {
+    messageError = "Usuário já cadastrado";
+    return messageError;
+  }
+
+  const regexp = /^\S*$/u; // Regex p/ verificação de espaços entre palavras
+  if (!regexp.test(user)) {
+    messageError = "Espaços não são permitidos";
+    return messageError;
+  }
+  if (user.length > 20) {
+    messageError = "Máximo de 20 caracteres";
+    return messageError;
+  }
+
+  try {
+    await prismaClient.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        profile: user,
+      },
+    });
+  } catch (error) {
+    console.error(`Erro ${error}`);
+    messageError = "Erro ao atualizar o usuário";
     return messageError;
   }
 }

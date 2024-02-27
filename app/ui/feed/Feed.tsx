@@ -135,7 +135,7 @@ export default function Feed({ userId }: { userId?: string }) {
             <p className="py-8 text-center text-slate-400">
               {items.length > 0
                 ? "Não existem mais postagens."
-                : "Você não possui nenhuma foto postada."}
+                : "Não há foto(s) postada(s)."}
             </p>
           }
         >

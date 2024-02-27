@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import FailureAlert from "@/app/ui/FailureAlert";
 import { Spinner } from "flowbite-react";
+import IconGoogle from "../Icons/IconGoogle";
 
 interface CustomElements extends HTMLFormControlsCollection {
   user: HTMLInputElement;
@@ -63,6 +64,7 @@ export default function LoginPage() {
       onSubmit={handleSubmit}
     >
       <h1 className={`${spectral.className} title text-5xl`}>Login</h1>
+
       <Input
         type="text"
         labelText="Usuário / Email"
@@ -83,6 +85,30 @@ export default function LoginPage() {
           {loading ? <Spinner color="purple" /> : "Entrar"}
         </Button>
       </div>
+
+      <div className="mt-4 flex max-w-md items-center justify-between">
+        <span className="w-1/5 border-b lg:w-1/4"></span>
+
+        <p className="text-center text-xs uppercase text-gray-500 ">
+          ou faça login com o Google
+        </p>
+
+        <span className="w-1/5 border-b  lg:w-1/4"></span>
+      </div>
+
+      <Link
+        href="#"
+        onClick={() => signIn("google", { callbackUrl: "/login/profile" })}
+        className="mt-4 flex max-w-md transform items-center justify-center rounded-lg border text-gray-600 transition-colors duration-300 hover:bg-gray-50"
+      >
+        <div className="px-4 py-2">
+          <IconGoogle />
+        </div>
+
+        <span className="w-5/6 px-4 py-3 text-center font-bold">
+          Entre com o Google
+        </span>
+      </Link>
 
       <div className="mt-10">
         <h2 className={`${spectral.className} subtitle text-4xl`}>

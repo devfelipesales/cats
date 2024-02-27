@@ -1,25 +1,24 @@
 import { TUser, authOptions } from "@/app/lib/auth";
-import CreateAccount from "@/app/ui/login/CreateAccount";
+import LoginGoogle from "@/app/ui/login/LoginGoogle";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Criar Conta",
+  title: "Login",
 };
-
 export default async function Page() {
   const session = await getServerSession(authOptions);
 
-  if (session?.user) {
-    const user = session.user as TUser;
+  if (!session?.user) {
+    redirect("/login");
+  }
 
-    if (!user.profile) {
-      redirect("/login/profile");
-    }
+  const user = session.user as TUser;
 
+  if (user.profile) {
     redirect("/profile");
   }
 
-  return <CreateAccount />;
+  return <LoginGoogle />;
 }
