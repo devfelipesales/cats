@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { TUser } from "@/app/lib/auth";
 import { formatDateToLocal, formatTimeToLocal } from "@/app/lib/utils";
 import { clsx } from "clsx";
+import UserViewsModal from "./UserViewsModal";
 
 type TPhotoComments = {
   id: string;
@@ -33,6 +34,7 @@ export default function PhotoContent({
   const inputComment = React.useRef<HTMLInputElement>(null);
   const IconSend = React.useRef<SVGSVGElement>(null);
   const SectionScroll = React.useRef<HTMLElement>(null);
+  const [openModalViews, setOpenModalViews] = React.useState(false);
   const { status, data } = useSession();
   const user = data?.user as TUser;
 
@@ -179,7 +181,26 @@ export default function PhotoContent({
           </button>
 
           <div className="relative flex gap-4">
-            <div className="flex items-center gap-1">
+            {openModalViews && (
+              <UserViewsModal
+                openModal={openModalViews}
+                setOpenModal={setOpenModalViews}
+                userId={user.id}
+                photoId={photo.id}
+              />
+            )}
+
+            <div
+              className={clsx("flex items-center gap-1 transition-colors", {
+                "hover:text-indigo-400": user?.id === photo.userId,
+                "cursor-pointer": user?.id === photo.userId,
+              })}
+              onClick={() => {
+                if (user?.id === photo.userId) {
+                  setOpenModalViews(true);
+                }
+              }}
+            >
               <Image
                 src="/view-color.svg"
                 width={16}

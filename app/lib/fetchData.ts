@@ -151,13 +151,6 @@ export type TPhoto = {
     };
     comment: string;
   }[];
-  views: {
-    id: string;
-    user: {
-      id: string;
-      profile: string;
-    };
-  }[];
   _count: {
     views: number;
   };
@@ -193,20 +186,9 @@ export async function fetchPhotoById(id: string) {
             },
           },
         },
+
         orderBy: {
           createdAt: "desc",
-        },
-      },
-      views: {
-        distinct: "viewedBy",
-        select: {
-          id: true,
-          user: {
-            select: {
-              id: true,
-              profile: true,
-            },
-          },
         },
       },
       _count: {
@@ -264,4 +246,50 @@ export async function fetchProfileById(userId: string) {
   });
 
   return profile;
+}
+
+export type TUserViews = {
+  id: string;
+  photoId: string;
+  viewedBy: string;
+  createdAt: Date;
+  user: {
+    id: string;
+    _count: {
+      views: number;
+    };
+    profile: string | null;
+    image: string | null;
+  };
+};
+
+export async function fetchUserViews(photoId: string) {
+  noStore();
+  const data = await prismaClient.views.findMany({
+    distinct: "viewedBy",
+    where: {
+      photoId: photoId,
+    },
+
+    include: {
+      user: {
+        select: {
+          id: true,
+          profile: true,
+          image: true,
+          _count: {
+            select: {
+              views: {
+                where: {
+                  photoId: photoId,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return data;
 }
