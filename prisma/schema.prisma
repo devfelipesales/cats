@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id       String     @id @default(uuid())
-  profile  String?    @db.VarChar(20) 
+  profile  String?    @db.VarChar(20)
   name     String     
   email    String?    @unique
   password String?
@@ -20,6 +20,7 @@ model User {
   emailVerified DateTime? @map("email_verified")
   accounts      Account[]
   sessions      Session[]
+  friends       Friend[]
 }
 
 // Next Auth
@@ -94,4 +95,19 @@ model Views {
   viewedBy    String   
   user        User    @relation(fields: [viewedBy], references: [id])
   createdAt   DateTime @default(now())
+}
+
+model Friend {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User   @relation(fields: [userId], references: [id])
+  userProfile   String    
+  createdAt     DateTime @default(now())
+  status        FriendStatus?   
+}
+
+enum FriendStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
 }
