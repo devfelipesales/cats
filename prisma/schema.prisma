@@ -20,7 +20,6 @@ model User {
   emailVerified DateTime? @map("email_verified")
   accounts      Account[]
   sessions      Session[]
-  friends       Friend[]
 }
 
 // Next Auth
@@ -99,9 +98,8 @@ model Views {
 
 model Friend {
   id            String   @id @default(uuid())
-  userId        String
-  user          User   @relation(fields: [userId], references: [id])
-  userProfile   String    
+  userWhoAdd    String
+  userAdded     String    
   createdAt     DateTime @default(now())
   status        FriendStatus?   
 }
