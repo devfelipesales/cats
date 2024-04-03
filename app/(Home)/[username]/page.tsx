@@ -16,7 +16,7 @@ export default async function UserPage({
   if (session?.user) {
     const user = session.user as TUser;
 
-    if (!user.profile) {
+    if (!user?.profile) {
       redirect("/login/profile");
     }
   }
