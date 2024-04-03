@@ -1,5 +1,6 @@
 "use server";
 
+import { FriendStatus } from "@prisma/client";
 import { ITEMS_PER_PAGE, TOP_VIEWED_PHOTOS } from "./constants";
 import { prismaClient } from "./prisma";
 import { supabase } from "./supabase";
@@ -288,6 +289,152 @@ export async function fetchUserViews(photoId: string) {
           },
         },
       },
+    },
+  });
+
+  return data;
+}
+
+export async function fetchFriendStatus(
+  loggedUser: string,
+  profileUser: string,
+) {
+  noStore();
+  const data = await prismaClient.friend.findFirst({
+    where: {
+      OR: [
+        {
+          userWhoAdd: loggedUser,
+          userAdded: profileUser,
+        },
+        {
+          userWhoAdd: profileUser,
+          userAdded: loggedUser,
+        },
+      ],
+      status: {
+        not: "REJECTED",
+      },
+    },
+  });
+
+  return data;
+}
+
+export type TFriends = {
+  id: string;
+  status: FriendStatus | null;
+  AddedBy: {
+    profile: string | null;
+    name: string;
+    image: string | null;
+  };
+  Added: {
+    profile: string | null;
+    name: string;
+    image: string | null;
+  };
+};
+
+export async function fetchFriends(loggedUser: string) {
+  noStore();
+
+  const data = await prismaClient.friend.findMany({
+    select: {
+      id: true,
+      status: true,
+      Added: {
+        select: {
+          profile: true,
+          name: true,
+          image: true,
+        },
+      },
+      AddedBy: {
+        select: {
+          profile: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+
+    where: {
+      OR: [
+        {
+          userWhoAdd: loggedUser,
+        },
+        {
+          userAdded: loggedUser,
+        },
+      ],
+      status: "ACCEPTED",
+    },
+  });
+
+  return data;
+}
+
+export type TPendingFriends = {
+  id: string;
+  Added: {
+    profile: string | null;
+    name: string;
+    image: string | null;
+  };
+};
+
+export async function fetchPendingFriends(loggedUser: string) {
+  noStore();
+
+  const data = await prismaClient.friend.findMany({
+    select: {
+      id: true,
+      Added: {
+        select: {
+          profile: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+
+    where: {
+      userWhoAdd: loggedUser,
+      status: "PENDING",
+    },
+  });
+
+  return data;
+}
+
+export type TFriendsForApprove = {
+  id: string;
+  AddedBy: {
+    profile: string | null;
+    name: string;
+    image: string | null;
+  };
+};
+
+export async function fetchFriendsForApprove(loggedUser: string) {
+  noStore();
+
+  const data = await prismaClient.friend.findMany({
+    select: {
+      id: true,
+      AddedBy: {
+        select: {
+          profile: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+
+    where: {
+      userAdded: loggedUser,
+      status: "PENDING",
     },
   });
 

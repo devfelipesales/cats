@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import IconGrid from "../../Icons/IconGrid";
 import IconPlus from "../../Icons/IconPlus";
@@ -9,7 +10,7 @@ import { usePathname } from "next/navigation";
 import styles from "./NavProfile.module.css";
 
 import IconProfileInfo from "../../Icons/IconProfileInfo";
-import React from "react";
+import IconProfileFriends from "../../Icons/IconProfileFriends";
 
 export default function NavProfile() {
   const [mobileMenu, setMobileMenu] = React.useState(false);
@@ -79,6 +80,14 @@ export default function NavProfile() {
         >
           <IconChart />
           <p className="sm:hidden">Estatísticas</p>
+        </Link>
+        <Link
+          href="/profile/friends"
+          title="Amigos"
+          className={pathname === "/profile/friends" ? styles.active : ""}
+        >
+          <IconProfileFriends />
+          <p className="sm:hidden">Amigos</p>
         </Link>
         <Link
           href="/profile/info"

@@ -79,6 +79,18 @@
   }
 }
 
+.hiddenSlowly {
+  opacity: 1;
+  animation: hiddenSlowly ease-in 0.5s forwards;
+}
+
+@keyframes hiddenSlowly {
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
 .animeBottom {
   opacity: 0;
   transform: translateY(30px);

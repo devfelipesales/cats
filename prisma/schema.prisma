@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id       String     @id @default(uuid())
-  profile  String?    @db.VarChar(20)
+  profile  String?    @unique @default(uuid())
   name     String     
   email    String?    @unique
   password String?
@@ -20,6 +20,8 @@ model User {
   emailVerified DateTime? @map("email_verified")
   accounts      Account[]
   sessions      Session[]
+  addedBy       Friend[]  @relation("whoAdd")
+  added         Friend[]  @relation("userAdded")
 }
 
 // Next Auth
@@ -61,8 +63,6 @@ model VerificationRequest {
   @@unique([identifier, token])
 }
 
-
-
 model Photos {
   id        String     @id 
   userId    String
@@ -99,7 +99,9 @@ model Views {
 model Friend {
   id            String   @id @default(uuid())
   userWhoAdd    String
-  userAdded     String    
+  userAdded     String
+  AddedBy       User      @relation("whoAdd" ,fields: [userWhoAdd], references: [profile])
+  Added         User      @relation("userAdded" ,fields: [userAdded], references: [profile])
   createdAt     DateTime @default(now())
   status        FriendStatus?   
 }

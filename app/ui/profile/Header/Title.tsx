@@ -8,6 +8,7 @@ const TITLES = {
   "/profile/post": "Postar Foto",
   "/profile/stats": "Estatísticas",
   "/profile/info": "Informações",
+  "/profile/friends": "Amigos",
 };
 
 export default function Title() {

@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { hash } from "bcrypt";
 import { photoUploadValidation, userCreateValidation } from "./validations";
 import { checkUser } from "./utils";
+import { FriendStatus } from "@prisma/client";
 
 export type TUploadPhoto = {
   errors: {
@@ -203,5 +204,48 @@ export async function updateProfile(userId: string, profile: string) {
     console.error(`Erro ${error}`);
     messageError = "Erro ao atualizar o usuário";
     return messageError;
+  }
+}
+
+export async function addFriend(loggedUser: string, profileUser: string) {
+  try {
+    const data = await prismaClient.friend.create({
+      data: {
+        userWhoAdd: loggedUser,
+        userAdded: profileUser,
+        status: "PENDING",
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error("Erro ao adicionar o usuário");
+  }
+}
+
+export async function removeFriend(id: string) {
+  try {
+    const data = await prismaClient.friend.delete({
+      where: {
+        id: id,
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error("Erro ao remover o usuário");
+  }
+}
+
+export async function updateFriendStatus(id: string, status: FriendStatus) {
+  try {
+    const data = await prismaClient.friend.update({
+      data: {
+        status: status,
+      },
+      where: {
+        id: id,
+      },
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar o usuário");
   }
 }
